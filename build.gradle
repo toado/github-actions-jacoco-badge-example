@@ -1,8 +1,10 @@
 plugins {
     id 'java'
     id 'application'
-    id 'com.github.johnrengelman.shadow' version '4.0.2'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+    
     // TODO add jacoco
+    id 'jacoco'
 }
 
 group 'com.example.helloworld'
@@ -39,5 +41,16 @@ shadowJar {
 }
 
 // TODO Specify Jacoco version
+jacoco {
+    toolVersion = "0.8.7"
+}
 
 // TODO Configure Jacoco
+jacocoTestReport {
+    dependsOn test  // depends ONLY on the test stage of the gradle build -- ignores all others
+    reports {
+        xml.required = true
+        csv.required = true
+        html.required = true
+    }
+}

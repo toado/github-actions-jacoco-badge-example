@@ -30,8 +30,31 @@ jobs:
           with:
             java-version: '8'
             distribution: 'adopt'
+
         - name: Testing
           working-directory: .
           run: |
             chmod +x gradlew
             ./gradlew test
+
+        - name: Generate Test Coverage Report
+          run: ./gradlew jacocoTestReport
+
+        - name: Generate Jacoco Badge
+          uses: cicirello/jacoco-badge-generator@v2
+          with:
+            generate-branches-badge: true
+            jacoco-csv-file: build/reports/jacoco/test/jacocoTestReport.csv
+
+        - name: Commit and push the badge (if it changed)
+          uses: EndBug/add-and-commit@v7
+          with:
+            default_author: github_actions
+            message: 'commit badge'
+            add: '*.svg'
+
+        - name: Upload JaCoCo coverage report
+          uses: action/upload-artifact@v2
+          with:
+            name: jacoco-report
+            path: target/site/jacoco
